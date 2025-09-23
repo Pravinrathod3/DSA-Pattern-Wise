@@ -1,3 +1,5 @@
+//Variations of cycle detection in directed graph
+
 #include<bits/stdc++.h>
 using namespace std;
 
@@ -9,18 +11,18 @@ public:
         visited[node] = 1;
         pathvisited[node] = 1;
 
-        for(int i=0; i<graph[node].size(); i++){
+        for(int i=0; i<graph[node].size(); i++){ // traversing all the adjacent nodes
             if(!visited[graph[node][i]]){
                 if(dfs(graph[node][i], visited, pathvisited, graph)){
                     return true;
                 }
             }
-            else if(pathvisited[graph[node][i]]){
+            else if(pathvisited[graph[node][i]]){       // cycle detected
                 return true;
             }
         }
 
-        pathvisited[node] = 0;
+        pathvisited[node] = 0;                         // backtracking
         return false;
     }
 
