@@ -47,3 +47,6 @@ int main(){
     cout << sol.wordBreak(s, wordDict) << endl; // Output: 1 (true)
     return 0;
 }
+
+//Time Complexity: O(n^2) in the worst case, where n is the length of the string s. This is because for each character in the string, we may need to check all possible substrings starting from that character.
+//Space Complexity: O(n) for the memoization array and the recursion stack. The memoization array stores results for each index in the string, and the recursion stack can go as deep as the length of the string in the worst case.
