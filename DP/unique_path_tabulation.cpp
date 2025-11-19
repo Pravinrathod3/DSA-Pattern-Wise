@@ -6,22 +6,20 @@ public:
     int uniquePaths(int m, int n) {
         vector<vector<int>> dp(m, vector<int> (n, 0));
 
-        dp[0][0] = 1;  // Starting point
-
         for(int i=0; i<m; i++){
             for(int j=0; j<n; j++){
-                int up, left;
                 
-                if(i == 0 || j == 0){   // First row or first column is 1
-                    dp[i][j] = 1;       //if we are in first row or first column, there's only one way to reach any cell
-                    continue;
+                if(i == 0 && j == 0){   // First row and first column is 1
+                    dp[i][j] = 1;       
                 }
                 else{
-                    up = dp[i-1][j];   // From the cell above
-                    left = dp[i][j-1];  // From the cell to the left
+                    int up, left;
+
+                    if(i > 0) up = dp[i-1][j];   // From the cell above axcept first row
+                    if(j > 0) left = dp[i][j-1];  // From the cell to the left except first column
+                    dp[i][j] = up+left;   // Total paths to (i, j)
                 }
 
-                dp[i][j] = up+left;   // Total paths to (i, j)
                 
             }
         }
