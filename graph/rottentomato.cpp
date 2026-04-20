@@ -1,73 +1,63 @@
-#include<bits/stdc++.h>
-using namespace std;
-
 class Solution {
 public:
-    int orangesRotting(vector<vector<int>>& grid) {
-        int n = grid.size();
-        int m = grid[0].size();
 
-        vector<vector<int>> visited(n, vector<int>(m, 0));
+
+    int orangesRotting(vector<vector<int>>& grid) {
+        int m = grid.size();
+        int n = grid[0].size();
+
+        vector<vector<int>> visited(m, vector<int> (n, 0));
+        queue<pair<pair<int,int>, int >> qu;
 
         int time = 0;
-        
-        queue<pair<pair<int, int>, int>> qu;
 
-        for(int i=0; i<n; i++){
-            for(int j=0; j<m; j++){
-                if(grid[i][j] == 2){
-                    visited[i][j] = 2;
-                    qu.push({{i, j}, time});
+        for(int i=0; i<m; i++){
+            for(int j=0; j<n; j++){
+                if(grid[i][j] == 2 && !visited[i][j]){
+                   visited[i][j] = 2;
+                   qu.push({{i, j}, time});
                 }
             }
         }
 
+        int drow[4] = {0, 1, 0, -1};
+        int dcol[4] = {-1, 0, 1, 0};
+
+
+
         while(!qu.empty()){
-            int l = qu.size();
-                int i = qu.front().first.first;
-                int j = qu.front().first.second;
-                int t = qu.front().second;
-                qu.pop();
+            auto it = qu.front();
+            qu.pop();
 
-                if(i-1 >= 0 && grid[i-1][j] == 1 && visited[i-1][j] != 2){
-                   visited[i-1][j] = 2;
-                   qu.push({{i-1, j}, t+1});
-                }
-                if(j-1 >= 0 && grid[i][j-1] == 1  && visited[i][j-1] != 2){
-                   visited[i][j-1] = 2;
-                   qu.push({{i, j-1}, t+1});
-                }
-                if(i+1 < n && grid[i+1][j] == 1  && visited[i+1][j] != 2){
-                   visited[i+1][j] = 2;
-                   qu.push({{i+1, j}, t+1});
-                }
-                if(j+1 < m && grid[i][j+1] == 1  && visited[i][j+1] != 2){
-                   visited[i][j+1] = 2;
-                   qu.push({{i, j+1}, t+1});
-                }
+            int i = it.first.first;
+            int j = it.first.second;
+            int t = it.second;
 
-                time = max(time, t);
-            
+            time = max(time, t);
+
+            for(int k=0; k<4; k++){
+                int nrow = i+drow[k];
+                int ncol = j+dcol[k];
+
+                if(nrow >= 0 && nrow < m && ncol >= 0 && ncol < n && grid[nrow][ncol] == 1 && !visited[nrow][ncol]){
+                    visited[nrow][ncol] = 2;
+                    qu.push({{nrow, ncol}, t+1});
+                }
+            }
+
+
         }
 
-        for(int i=0; i<n; i++){
-            for(int j=0; j<m; j++){
-                if(visited[i][j] != 2 && grid[i][j] == 1){
+        for(int i=0; i<m; i++){
+            for(int j=0; j<n; j++){
+                if(grid[i][j] == 1 && visited[i][j] != 2){
                     return -1;
                 }
             }
         }
 
-        return time;
 
+
+        return time;
     }
 };
-
-int main(){
-    vector<vector<int>> grid = {{2,1,1}, {1,1,0}, {0,1,1}};
-   
-    Solution obj;
-    int ans = obj.orangesRotting(grid);
-    cout << ans << endl;
-    return 0;
-}
