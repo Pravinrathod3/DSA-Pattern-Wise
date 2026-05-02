@@ -21,12 +21,17 @@ public:
         while(!qu.empty()){
             auto [i, j] = qu.front();
             qu.pop();
+            
 
             for(int k=0; k<4; k++){
-                if(n > (i + adji[k]) && (i + adji[k]) >= 0 && m > (j + adjj[k]) && (j + adjj[k]) >= 0){
-                    if(image[i + adji[k]][j + adjj[k]] == image[i][j] && visited[i + adji[k]][j + adjj[k]] != color){
-                        visited[i + adji[k]][j + adjj[k]] = color;
-                        qu.push({i + adji[k], j + adjj[k]});
+
+                int posi = i + adji[k];
+                int posj = j + adjj[k];
+
+                if(n > posi && posi >= 0 && m > posj && posj >= 0){
+                    if(image[posi][posj] == image[sr][sc] && visited[posi][posj] != color){
+                        visited[posi][posj] = color;
+                        qu.push({posi, posj});
                     }
                 }
             }
