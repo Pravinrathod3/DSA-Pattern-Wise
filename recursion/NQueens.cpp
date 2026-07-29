@@ -3,77 +3,63 @@ using namespace std;
 
 class Solution {
 public:
-    
+
     vector<vector<string>> ans;
 
-    bool safe(int r, int c, vector<string>& res, int n){
-        int row = r;
-        int col = c;
-        for(int i=0; i<n; i++){
-            if(res[row][i] ==  'Q') return false;
-            if(res[i][col] == 'Q') return false;
+    bool safe(int row, int col, vector<string>& temp, int n){
+        //left side
+
+        for(int j=col; j>=0; j--){
+            if(temp[row][j] == 'Q') return false;
         }
 
-        row = r;
-        col = c;
+        //cross left up
 
-        while(row < n && col < n && row >= 0 && col >= 0){
-            if(res[row][col] == 'Q') return false;
-            row++;
-            col++;
+        int i = row, j = col;
+
+        while(i >= 0 && j >= 0){
+            if(temp[i][j] == 'Q') return false;
+            i--;
+            j--;
         }
 
-        row = r;
-        col = c;
+        //cross left down
 
-        while(row < n && col >= 0 && row >= 0 && col < n){
-            if(res[row][col] == 'Q') return false;
-            row++;
-            col--;
+        i = row, j = col;
+
+        while(i < n && j >= 0){
+            if(temp[i][j] == 'Q') return false;
+            i++;
+            j--;
         }
 
-        row = r;
-        col = c;
-
-        while(row >= 0 && col < n && row < n && col >= 0){
-            if(res[row][col] == 'Q') return false;
-            row--;
-            col++;
-        }
-
-        row = r;
-        col = c;
-
-        while(row >= 0 && col >= 0 && row < n && col < n){
-            if(res[row][col] == 'Q') return false;
-            row--;
-            col--;
-        }
-         
         return true;
 
     }
 
-    void backtrack(int col, vector<string>& res, int n){
+
+    void backtrack(int col, vector<string>& temp, int n){
+
         if(col == n){
-            ans.push_back(res);
-            return ;
+            ans.push_back(temp);
+            return;
         }
 
         for(int i=0; i<n; i++){
-            if(safe(i, col, res, n)){
-                res[i][col] = 'Q';
-                backtrack(col+1, res, n);
-                res[i][col] = '.';
+            if(safe(i, col, temp, n)){
+                temp[i][col] = 'Q';
+
+                backtrack(col+1, temp, n);
+
+                temp[i][col] = '.';
             }
-            
         }
     }
 
     vector<vector<string>> solveNQueens(int n) {
-        vector<string> res(n, string(n, '.'));
+        vector<string> temp(n, string(n, '.'));
 
-        backtrack(0, res, n);
+        backtrack(0, temp, n);
 
         return ans;
     }
