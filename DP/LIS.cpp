@@ -1,17 +1,21 @@
 class Solution {
 public:
 
-    int sequence(int i, int node, vector<int>& nums, vector<vector<int>>& dp, int offset){
-        if(i == nums.size()) return 0;
+      int solve(int node, int prev, vector<int>& nums, vector<vector<int>>& dp){
+        if(node == nums.size()) return 0;
 
-        if(dp[i][offset + node] != -1) return dp[i][offset + node];
+        if(dp[node][prev+1] != -1) return dp[node][prev+1]; 
 
-        if(node == -1 || nums[node] < nums[i]){
-            return dp[i][offset + node] = max( (1 + sequence(i+1, i, nums, dp, offset)), sequence(i+1, node, nums, dp, offset) );
+        int exclude = solve(node+1, prev, nums, dp);
+
+        int include = 0;
+
+        if(prev == -1 ||  nums[node] > nums[prev]){
+            include = solve(node+1, node, nums, dp)+1;
         }
-        else{
-            return dp[i][offset + node] = sequence(i+1, node, nums, dp, offset);
-        }
+        
+
+        return dp[node][prev+1] = max(exclude, include);
     }
 
     int lengthOfLIS(vector<int>& nums) {
